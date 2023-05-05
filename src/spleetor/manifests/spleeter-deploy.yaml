@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spleeter
+  labels:
+    app: spleeter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spleeter
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 8
+  template:
+    metadata:
+      labels:
+        app: spleeter
+    spec:
+      containers:
+        - name: spleeter
+          image: samueltefera/spleeter:latest
+          envFrom:
+            - configMapRef:
+                name: spleeter-configmap
+            - secretRef:
+                name: spleeter-secret
+          # env:
+          #   - name: runtimeRequestTimeout
+          #     value: "10m"
